@@ -1,0 +1,107 @@
+@import 'tailwindcss';
+
+/* Brand tokens taken from the original site */
+@theme {
+  --font-sans: 'Inter', Arial, sans-serif;
+  --font-mono: 'Courier New', monospace;
+  --breakpoint-nav: 992px;
+
+  --color-navy: #004b87;
+  --color-navy-dark: #003a69;
+  --color-blue: #005ea2;
+  --color-red: #e42313;
+  --color-ink: #202020;
+  --color-body: #666666;
+  --color-muted: #595959;
+  --color-line: #d8d8d8;
+  --color-paper: #f7f7f7;
+  --color-alert: #e7f6f8;
+  --color-alert-edge: #3573b1;
+  --color-lane: #8d99ab;
+  --color-reviews: #f0f2f7;
+  --color-star: #f4b400;
+
+  --animate-city-scroll: city-scroll 35s linear infinite;
+  --animate-slide-in: slide-in 450ms cubic-bezier(0.23, 1, 0.32, 1) 150ms both;
+  --animate-pop-up: pop-up 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-pop-center: pop-center 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  --animate-fade-up: fade-up 600ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  --animate-reveal: reveal 380ms cubic-bezier(0.23, 1, 0.32, 1) both;
+
+  @keyframes city-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes slide-in {
+    from { transform: translateX(140%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes pop-up {
+    from { opacity: 0; transform: scale(0.9) translateY(16px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes pop-center {
+    from { opacity: 0; transform: translate(-50%, -47%) scale(0.96); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes reveal {
+    from { opacity: 0; transform: translateY(18px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+@layer base {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-body);
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  button {
+    cursor: pointer;
+  }
+  /* Smartsupp's own bubble stays hidden; the Track & Help widget opens the chat */
+  #widgetButtonFrame { display: none !important; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #f1f5f9; }
+  ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+}
+
+/* ── Network map (SVG route drawing) ── */
+@layer components {
+  .gn-route { stroke-dasharray: 700; stroke-dashoffset: 700; animation: gn-draw var(--d, 1.9s) cubic-bezier(0.23, 1, 0.32, 1) var(--delay, 0ms) forwards; }
+  .gn-dot { opacity: 0; transform-box: fill-box; transform-origin: center; animation: gn-dot-in 380ms cubic-bezier(0.23, 1, 0.32, 1) var(--delay, 0ms) forwards; }
+  .gn-ring { opacity: 0; transform-box: fill-box; transform-origin: center; animation: gn-ring 2.2s ease-out var(--delay, 0ms) infinite; }
+  @keyframes gn-draw { to { stroke-dashoffset: 0; } }
+  @keyframes gn-dot-in { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
+  @keyframes gn-ring { 0% { opacity: 0.4; transform: scale(0.6); } 100% { opacity: 0; transform: scale(1.9); } }
+
+  /* FAQ disclosure chevron */
+  .faq-item > summary::-webkit-details-marker { display: none; }
+  .faq-chevron { transform: rotate(45deg); }
+  .faq-item[open] > summary { color: var(--color-blue); }
+  .faq-item[open] .faq-chevron { transform: rotate(225deg); margin-bottom: -4px; margin-top: 4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gn-route { stroke-dashoffset: 0; animation: none; }
+  .gn-dot { opacity: 1; animation: none; }
+  .gn-ring { animation: none; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
